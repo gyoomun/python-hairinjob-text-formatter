@@ -13,6 +13,9 @@ def format_contact_text(text):
     # 키워드 목록
     keywords = ['업체주소', '전화번호', '채용담당자', '담당자연락처']
 
+    # 전화번호 뒤 줄바꿈 + ※ 안심번호 패턴을 공백으로 치환
+    text = re.sub(r'(\d{3,4}[-\d]+)\n(※ 안심번호)', r'\1 \2', text)
+
     # 각 키워드를 찾아서 변환
     for keyword in keywords:
         # 키워드 뒤에 공백이 오는 경우를 찾아 "키워드: "로 변환
@@ -20,6 +23,9 @@ def format_contact_text(text):
 
     # 첫 번째 키워드 앞의 불필요한 줄바꿈 제거 (업체명 바로 다음)
     text = re.sub(r'(\S+)\n\n업체주소:', r'\1\n업체주소:', text)
+
+    # 연속된 빈 줄을 하나로 정리
+    text = re.sub(r'\n{3,}', r'\n\n', text)
 
     return text
 
